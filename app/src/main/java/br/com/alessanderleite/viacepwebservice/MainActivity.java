@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.com.alessanderleite.viacepwebservice.model.CEP;
 import br.com.alessanderleite.viacepwebservice.model.SimpleCallback;
@@ -80,6 +81,44 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /* search for Street, City and State(UF) */
+        btnBuscarPorRuaCidadeEstado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!etCidade.getText().toString().isEmpty() &&
+                        !etRua.getText().toString().isEmpty() &&
+                                spUFs.getSelectedItemPosition() != 0) {
+
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    CEPService service = new CEPService(MainActivity.this);
+
+                    service.getCEPUFCidadeRua(spUFs.getSelectedItem().toString(),
+                            etCidade.getTransitionName().toString(),
+                            etRua.getText().toString(), new SimpleCallback<List<CEP>>() {
+                                @Override
+                                public void onResponse(List<CEP> response) {
+
+                                    List<CEP> CEPAux = response;
+                                    arrayCEPs = new ArrayList<>();
+
+                                    for (CEP cep : CEPAux) {
+                                        arrayCEPs.add(cep);
+                                    }
+
+                                    toast(getResources().getString(R.string.toast_aviso_retorno)+arrayCEPs.toString());
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    toast(getResources().getString(R.string.toast_erro_generico)+error);
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
+                            });
+                }
+            }
+        });
     }
 
     private void toast(String msg) {

@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     CEPService service = new CEPService(MainActivity.this);
 
                     service.getCEPUFCidadeRua(spUFs.getSelectedItem().toString(),
-                            etCidade.getTransitionName().toString(),
+                            etCidade.getText().toString(),
                             etRua.getText().toString(), new SimpleCallback<List<CEP>>() {
                                 @Override
                                 public void onResponse(List<CEP> response) {
